@@ -1,0 +1,1583 @@
+[
+  {
+    "id": "WEB-001",
+    "name": "Web Server Spawned Suspicious Shell",
+    "description": "Detects web/application servers launching interactive shells, discovery tools, or download cradles — classic indicator of web shell or RCE exploitation.",
+    "severity": "high",
+    "type": "process_creation",
+    "parent_process_any": [
+      "java.exe",
+      "php.exe",
+      "php-cgi.exe",
+      "w3wp.exe",
+      "nginx.exe",
+      "httpd.exe",
+      "apache.exe",
+      "apache2",
+      "tomcat.exe",
+      "tomcat9.exe",
+      "ruby.exe",
+      "node.exe",
+      "python.exe",
+      "pythonw.exe",
+      "gunicorn",
+      "uvicorn",
+      "uwsgi"
+    ],
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "wscript.exe",
+      "cscript.exe",
+      "mshta.exe",
+      "whoami.exe",
+      "net.exe",
+      "net1.exe",
+      "curl.exe",
+      "wget.exe",
+      "certutil.exe",
+      "bitsadmin.exe",
+      "regsvr32.exe",
+      "rundll32.exe",
+      "msiexec.exe",
+      "wmic.exe"
+    ],
+    "tags": [
+      "initial-access",
+      "web-exploit",
+      "rce",
+      "t1190"
+    ]
+  },
+  {
+    "id": "WEBLOGIC-RCE-001",
+    "name": "WebLogic / Java App RCE (CVE-2020-14882 / CVE-2021-44228)",
+    "description": "Java parent spawning command interpreters with exploitation-indicative command-line fragments — covers WebLogic, Log4Shell, and similar Java deserialization RCE chains.",
+    "severity": "critical",
+    "type": "process_creation",
+    "parent_process_any": [
+      "java.exe",
+      "javaw.exe"
+    ],
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "sh",
+      "bash",
+      "dash",
+      "zsh"
+    ],
+    "commandline_contains_any": [
+      "whoami",
+      "hostname",
+      "ifconfig",
+      "ipconfig",
+      "net user",
+      "net group",
+      "powershell",
+      "cmd /c",
+      "curl",
+      "wget",
+      "certutil",
+      "bitsadmin",
+      "regsvr32",
+      "mshta",
+      "wscript",
+      "cscript",
+      "echo ",
+      "type ",
+      "Base64",
+      "FromBase64",
+      "IEX",
+      "Invoke-Expression",
+      "DownloadString",
+      "DownloadFile",
+      "Start-Process",
+      "$env:"
+    ],
+    "tags": [
+      "cve-2020-14882",
+      "cve-2021-44228",
+      "log4shell",
+      "rce",
+      "weblogic",
+      "t1059"
+    ]
+  },
+  {
+    "id": "OFFICE-MACRO-001",
+    "name": "Suspicious Office Child Process (Macro / Phishing)",
+    "description": "MS Office applications spawning scripting engines, shells, or LOLBins — strong indicator of malicious macro or OLE exploit.",
+    "severity": "critical",
+    "type": "process_creation",
+    "parent_process_any": [
+      "winword.exe",
+      "excel.exe",
+      "powerpnt.exe",
+      "mspub.exe",
+      "visio.exe",
+      "onenote.exe",
+      "msaccess.exe",
+      "outlook.exe",
+      "wordpad.exe",
+      "acrord32.exe",
+      "foxit.exe"
+    ],
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "wscript.exe",
+      "cscript.exe",
+      "mshta.exe",
+      "regsvr32.exe",
+      "rundll32.exe",
+      "msiexec.exe",
+      "installutil.exe",
+      "certutil.exe",
+      "bitsadmin.exe",
+      "curl.exe",
+      "wget.exe",
+      "nc.exe",
+      "ncat.exe"
+    ],
+    "tags": [
+      "initial-access",
+      "phishing",
+      "macro",
+      "t1566",
+      "t1059",
+      "t1204"
+    ]
+  },
+  {
+    "id": "PS-OBFUSCATED-001",
+    "name": "PowerShell Obfuscated / Suspicious Execution",
+    "description": "PowerShell launched with encoding, bypass, or hidden-window flags typical of initial stager or C2 dropper.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "-EncodedCommand",
+      "-e ",
+      "- e ",
+      "-enc ",
+      "- enc ",
+      "EncodedCommand",
+      "-WindowStyle Hidden",
+      "-w hidden",
+      "-NonI",
+      "-NonInteractive",
+      "ExecutionPolicy Bypass",
+      "-ep bypass",
+      "-nop",
+      "-noprofile",
+      "IEX",
+      "Invoke-Expression",
+      "DownloadString",
+      "DownloadFile",
+      "Net.WebClient",
+      "WebRequest",
+      "Start-BitsTransfer",
+      "bitsadmin",
+      "certutil",
+      "Base64",
+      "FromBase64String",
+      "[System.Convert]",
+      "Reflection.Assembly",
+      "Load(",
+      "LoadWithPartialName",
+      "System.Runtime.InteropServices",
+      "VirtualAlloc",
+      "WriteProcessMemory"
+    ],
+    "tags": [
+      "execution",
+      "defense-evasion",
+      "powershell",
+      "t1059.001",
+      "t1027"
+    ]
+  },
+  {
+    "id": "CRED-LSASS-001",
+    "name": "Credential Dumping — LSASS Access",
+    "description": "Known credential extraction tools or suspicious LSASS-related command-line arguments targeting the Windows credentials store.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "procdump.exe",
+      "procdump64.exe",
+      "mimikatz.exe",
+      "mimilove.exe",
+      "wce.exe",
+      "fgdump.exe",
+      "dumpert.exe",
+      "lsadump.exe",
+      "pwdump.exe",
+      "gsecdump.exe",
+      "safetydump.exe",
+      "nanodump.exe",
+      "pypykatz.exe",
+      "lsassy.exe"
+    ],
+    "commandline_contains_any": [
+      "lsass",
+      "sekurlsa",
+      "minidump",
+      "logonpasswords",
+      "wdigest",
+      "ntlm",
+      "kerberos",
+      "dpapi",
+      "vault",
+      "procdump -ma",
+      "procdump64 -ma"
+    ],
+    "tags": [
+      "credential-access",
+      "lsass",
+      "t1003",
+      "t1003.001"
+    ]
+  },
+  {
+    "id": "CRED-NTDS-001",
+    "name": "NTDS.dit / SAM Credential Dumping",
+    "description": "Detects attempts to dump Active Directory database or SAM hive via vssadmin, ntdsutil, or reg save.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "ntdsutil.exe",
+      "vssadmin.exe",
+      "diskshadow.exe",
+      "reg.exe"
+    ],
+    "commandline_contains_any": [
+      "ntds",
+      "ntds.dit",
+      "activate instance ntds",
+      "create full",
+      "save hklm\\sam",
+      "save hklm\\system",
+      "save hklm\\security",
+      "shadow copy"
+    ],
+    "tags": [
+      "credential-access",
+      "ntds",
+      "t1003.002",
+      "t1003.003"
+    ]
+  },
+  {
+    "id": "RANSOMWARE-001",
+    "name": "Potential Ransomware Activity — Shadow Copy Deletion",
+    "description": "Detects deletion of Volume Shadow Copies, a pre-encryption step common in ransomware attacks.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "vssadmin.exe",
+      "wmic.exe",
+      "wbadmin.exe",
+      "bcdedit.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "cmd.exe"
+    ],
+    "commandline_contains_any": [
+      "delete shadows",
+      "shadowstorage",
+      "resize shadowstorage",
+      "Win32_ShadowCopy",
+      "delete catalog",
+      "recover",
+      "recoveryenabled no",
+      "bootstatuspolicy ignoreallfailures"
+    ],
+    "tags": [
+      "ransomware",
+      "impact",
+      "t1490",
+      "t1489"
+    ]
+  },
+  {
+    "id": "LATERAL-PSEXEC-001",
+    "name": "PsExec / Remote Execution Tool Detected",
+    "description": "Detects PsExec and similar remote execution tools used for lateral movement.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "psexec.exe",
+      "psexec64.exe",
+      "paexec.exe",
+      "remcom.exe",
+      "smbexec.exe"
+    ],
+    "tags": [
+      "lateral-movement",
+      "t1570",
+      "t1021.002"
+    ]
+  },
+  {
+    "id": "LATERAL-WMI-001",
+    "name": "WMI Remote Execution / Lateral Movement",
+    "description": "WMI invoked with remote node parameters — commonly used for fileless lateral movement.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "wmic.exe",
+      "wmiprvse.exe"
+    ],
+    "commandline_contains_any": [
+      "/node:",
+      "/USER:",
+      "/password:",
+      "process call create",
+      "os get",
+      "computersystem get",
+      "shadowcopy",
+      "wmic /node"
+    ],
+    "tags": [
+      "lateral-movement",
+      "wmi",
+      "t1047",
+      "t1021"
+    ]
+  },
+  {
+    "id": "DISCOVERY-001",
+    "name": "Rapid System Discovery / Reconnaissance",
+    "description": "Multiple reconnaissance commands chained together — typical post-exploitation enumeration burst.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "net.exe",
+      "net1.exe",
+      "nltest.exe",
+      "arp.exe",
+      "whoami.exe",
+      "hostname.exe",
+      "systeminfo.exe",
+      "ipconfig.exe",
+      "nslookup.exe",
+      "tasklist.exe",
+      "quser.exe",
+      "query.exe",
+      "dsquery.exe",
+      "dsget.exe",
+      "csvde.exe",
+      "ldifde.exe",
+      "wmic.exe"
+    ],
+    "commandline_contains_any": [
+      "user /domain",
+      "group /domain",
+      "localgroup",
+      "accounts /domain",
+      "view /all",
+      "/domain",
+      "dclist",
+      "domaintrusts",
+      "/enum",
+      "trusteddomains"
+    ],
+    "tags": [
+      "discovery",
+      "t1018",
+      "t1069",
+      "t1087",
+      "t1482"
+    ]
+  },
+  {
+    "id": "DEFENSE-EVASION-001",
+    "name": "Security Tool Tampering / Bypass Attempt",
+    "description": "Attempts to disable, uninstall, or tamper with security products including Windows Defender, EDR agents, and audit policies.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "sc.exe",
+      "reg.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "cmd.exe",
+      "net.exe",
+      "wmic.exe",
+      "taskkill.exe"
+    ],
+    "commandline_contains_any": [
+      "DisableAntiSpyware",
+      "DisableRealtimeMonitoring",
+      "DisableBehaviorMonitoring",
+      "DisableIOAVProtection",
+      "TamperProtection",
+      "stop WinDefend",
+      "stop MsMpSvc",
+      "delete WinDefend",
+      "Set-MpPreference",
+      "Remove-MpPreference",
+      "Add-MpPreference -ExclusionPath",
+      "auditpol",
+      "SeDebugPrivilege",
+      "sc config windefend",
+      "taskkill /f /im msseces",
+      "taskkill /im mbam"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1562",
+      "t1562.001",
+      "t1562.002"
+    ]
+  },
+  {
+    "id": "LOLBIN-CERTUTIL-001",
+    "name": "CertUtil Used as Download Cradle",
+    "description": "CertUtil invoked with decode or urlcache options — classic LOLBin file download / base64 decode bypass.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "certutil.exe"
+    ],
+    "commandline_contains_any": [
+      "-decode",
+      "-decodehex",
+      "-urlcache",
+      "-split",
+      "-f http",
+      "-f https",
+      "urlcache -split",
+      "/decode",
+      "/urlcache"
+    ],
+    "tags": [
+      "defense-evasion",
+      "lolbin",
+      "t1027",
+      "t1105",
+      "certutil"
+    ]
+  },
+  {
+    "id": "LOLBIN-REGSVR32-001",
+    "name": "Regsvr32 Squiblydoo / COM Scriptlet Bypass",
+    "description": "Regsvr32 loading remote SCT COM scriptlet — Squiblydoo bypass technique.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "regsvr32.exe"
+    ],
+    "commandline_contains_any": [
+      "/i:http",
+      "/i:https",
+      "scrobj.dll",
+      "/s /n /i:",
+      ".sct",
+      "regsvr32 /s"
+    ],
+    "tags": [
+      "defense-evasion",
+      "lolbin",
+      "t1218.010",
+      "squiblydoo"
+    ]
+  },
+  {
+    "id": "LOLBIN-MSHTA-001",
+    "name": "MSHTA Remote Script Execution",
+    "description": "MSHTA loading a remote HTA or VBScript — common initial access and dropper technique.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "mshta.exe"
+    ],
+    "commandline_contains_any": [
+      "http://",
+      "https://",
+      "vbscript:",
+      "javascript:",
+      "about:<hta:",
+      "ftp://",
+      ".hta"
+    ],
+    "tags": [
+      "defense-evasion",
+      "lolbin",
+      "t1218.005"
+    ]
+  },
+  {
+    "id": "LOLBIN-RUNDLL32-001",
+    "name": "Suspicious RunDLL32 Execution",
+    "description": "RunDLL32 used to execute suspicious exports, remote DLLs, or JavaScript via Shell32.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "rundll32.exe"
+    ],
+    "commandline_contains_any": [
+      "javascript:",
+      "http://",
+      "https://",
+      "shell32.dll,ShellExec_RunDLL",
+      "advpack.dll",
+      "ieadvpack.dll",
+      "mshtml.dll",
+      "shdocvw.dll,OpenURL",
+      "url.dll,FileProtocolHandler",
+      "pcwutl.dll",
+      ".dll,",
+      "vbscript"
+    ],
+    "tags": [
+      "defense-evasion",
+      "lolbin",
+      "t1218.011"
+    ]
+  },
+  {
+    "id": "PERSIST-REG-RUN-001",
+    "name": "Startup Registry Key Modification",
+    "description": "Detects creation, modification, or deletion of well-known Windows persistence registry run keys.",
+    "severity": "high",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\CurrentVersion\\Run",
+      "\\CurrentVersion\\RunOnce",
+      "\\CurrentVersion\\RunOnceEx",
+      "\\CurrentVersion\\RunServices",
+      "\\CurrentVersion\\RunServicesOnce",
+      "\\Policies\\Explorer\\Run",
+      "\\Windows\\CurrentVersion\\Explorer\\Shell Folders",
+      "\\Windows\\CurrentVersion\\Explorer\\User Shell Folders"
+    ],
+    "tags": [
+      "persistence",
+      "registry-run-key",
+      "t1547.001"
+    ]
+  },
+  {
+    "id": "PERSIST-IFEO-001",
+    "name": "Image File Execution Options Debugger Injection",
+    "description": "IFEO Debugger key set — enables persistence, privilege escalation, or accessibility feature hijacking (Sticky Keys, Utilman, etc.).",
+    "severity": "high",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\Image File Execution Options\\",
+      "\\Image File Execution Options\\sethc.exe",
+      "\\Image File Execution Options\\utilman.exe",
+      "\\Image File Execution Options\\osk.exe",
+      "\\Image File Execution Options\\narrator.exe"
+    ],
+    "tags": [
+      "persistence",
+      "defense-evasion",
+      "ifeo",
+      "t1546.012"
+    ]
+  },
+  {
+    "id": "PERSIST-COM-001",
+    "name": "COM Object Hijacking via Registry",
+    "description": "Modification of CLSID InprocServer32 or LocalServer32 — used to hijack COM objects for persistence.",
+    "severity": "medium",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\CLSID\\",
+      "InprocServer32",
+      "LocalServer32",
+      "\\Classes\\"
+    ],
+    "tags": [
+      "persistence",
+      "com-hijacking",
+      "t1546.015"
+    ]
+  },
+  {
+    "id": "C2-SHELL-OUTBOUND-001",
+    "name": "Shell / Interpreter Outbound Network Connection",
+    "description": "Command shells or scripting engines making outbound connections — reverse shell or C2 beacon indicator.",
+    "severity": "high",
+    "type": "network_connection",
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "python.exe",
+      "pythonw.exe",
+      "python3.exe",
+      "perl.exe",
+      "ruby.exe",
+      "wscript.exe",
+      "cscript.exe",
+      "mshta.exe",
+      "nc.exe",
+      "ncat.exe",
+      "netcat.exe",
+      "bash",
+      "sh",
+      "zsh",
+      "dash"
+    ],
+    "remote_port_any": [
+      21,
+      22,
+      23,
+      25,
+      53,
+      80,
+      443,
+      1080,
+      3389,
+      4444,
+      4445,
+      5555,
+      6666,
+      7777,
+      8080,
+      8443,
+      8888,
+      9001,
+      9002,
+      31337
+    ],
+    "tags": [
+      "command-and-control",
+      "reverse-shell",
+      "t1059",
+      "t1105",
+      "t1571"
+    ]
+  },
+  {
+    "id": "C2-TOOLS-OUTBOUND-001",
+    "name": "Known Attack Framework / C2 Agent Outbound Connection",
+    "description": "Known offensive tooling making outbound network connections.",
+    "severity": "critical",
+    "type": "network_connection",
+    "process_any": [
+      "mimikatz.exe",
+      "mimilove.exe",
+      "cobaltstrike.exe",
+      "beacon.exe",
+      "metasploit.exe",
+      "msfconsole.exe",
+      "meterpreter.exe",
+      "empire.exe",
+      "sliver.exe",
+      "havoc.exe",
+      "brute_ratel.exe",
+      "vshell.exe",
+      "nimplant.exe"
+    ],
+    "remote_port_any": [
+      80,
+      443,
+      4444,
+      8080,
+      8443,
+      9001,
+      50050
+    ],
+    "tags": [
+      "command-and-control",
+      "t1071",
+      "t1573"
+    ]
+  },
+  {
+    "id": "FIM-SENSITIVE-CREDS-001",
+    "name": "Sensitive Credential / Config File Modified",
+    "description": "Changes to files commonly containing credentials, API keys, or security-critical configuration.",
+    "severity": "high",
+    "type": "file_change",
+    "path_contains_any": [
+      ".env",
+      ".env.local",
+      ".env.production",
+      "web.config",
+      "application.properties",
+      "application.yml",
+      "settings.py",
+      "config.php",
+      "wp-config.php",
+      "database.yml",
+      "secrets.yml",
+      "credentials.json",
+      "serviceaccount.json",
+      "id_rsa",
+      "id_ed25519",
+      "authorized_keys",
+      "known_hosts",
+      "htpasswd",
+      ".npmrc",
+      ".pypirc",
+      "boto.cfg",
+      "credentials"
+    ],
+    "tags": [
+      "credential-access",
+      "configuration-change",
+      "t1552",
+      "fim"
+    ]
+  },
+  {
+    "id": "FIM-STARTUP-SCRIPT-001",
+    "name": "Startup / Logon Script Modified",
+    "description": "Changes to OS startup scripts, profile files, or cron-equivalent locations — persistence via script modification.",
+    "severity": "high",
+    "type": "file_change",
+    "path_contains_any": [
+      "\\Startup\\",
+      "\\Start Menu\\Programs\\Startup",
+      "profile.ps1",
+      "Microsoft.PowerShell_profile",
+      "bashrc",
+      ".bash_profile",
+      ".profile",
+      "rc.local",
+      "init.d",
+      "cron",
+      "crontab",
+      "launchd",
+      "plist"
+    ],
+    "tags": [
+      "persistence",
+      "startup-script",
+      "t1037",
+      "t1547"
+    ]
+  },
+  {
+    "id": "EXFIL-ARCHIVE-001",
+    "name": "Suspicious Archival / Compression Before Exfiltration",
+    "description": "Archive utilities invoked with parameters commonly used to stage data for exfiltration.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "7z.exe",
+      "7za.exe",
+      "rar.exe",
+      "winrar.exe",
+      "zip.exe",
+      "tar.exe",
+      "compress.exe",
+      "makecab.exe"
+    ],
+    "commandline_contains_any": [
+      "-p",
+      "--password",
+      "a -",
+      "\\\\",
+      "c:\\users",
+      "c:\\windows\\temp",
+      "appdata",
+      "programdata",
+      "lsass",
+      "ntds",
+      "shadow"
+    ],
+    "tags": [
+      "exfiltration",
+      "collection",
+      "t1560",
+      "t1560.001"
+    ]
+  },
+  {
+    "id": "PRIV-ESC-TOKEN-001",
+    "name": "Token Impersonation / Privilege Escalation Tool",
+    "description": "Detects tools known for token stealing, UAC bypass, or local privilege escalation.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "incognito.exe",
+      "tokenvator.exe",
+      "juicypotato.exe",
+      "sweetpotato.exe",
+      "rottenpotato.exe",
+      "printspoofer.exe",
+      "bypassuac.exe",
+      "fodhelper.exe",
+      "eventvwr.exe",
+      "sdclt.exe",
+      "cmstp.exe"
+    ],
+    "commandline_contains_any": [
+      "impersonate",
+      "list_tokens",
+      "execute",
+      "/prog",
+      "elevate",
+      "bypass",
+      "uac"
+    ],
+    "tags": [
+      "privilege-escalation",
+      "t1134",
+      "t1548",
+      "uac-bypass"
+    ]
+  },
+  {
+    "id": "INJECT-001",
+    "name": "Suspicious Process Injection Indicator",
+    "description": "Processes known to be abused for injection or that explicitly reference injection APIs in their command line.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "mavinject.exe",
+      "syringe.exe",
+      "openprocess.exe"
+    ],
+    "commandline_contains_any": [
+      "VirtualAllocEx",
+      "WriteProcessMemory",
+      "CreateRemoteThread",
+      "QueueUserAPC",
+      "NtCreateThread",
+      "ZwCreateThread",
+      "SetWindowsHookEx",
+      "mavinject /injectrunning",
+      "--dll"
+    ],
+    "tags": [
+      "defense-evasion",
+      "privilege-escalation",
+      "process-injection",
+      "t1055"
+    ]
+  },
+  {
+    "id": "RECON-NETWORK-SCAN-001",
+    "name": "Network Scanner / Port Scanner Launched",
+    "description": "Known network scanning tools or port-scan indicative nmap flags.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "nmap.exe",
+      "nmap",
+      "masscan.exe",
+      "masscan",
+      "zmap.exe",
+      "angryipscan.exe",
+      "portscan.exe",
+      "superscan.exe",
+      "advanced_port_scanner.exe"
+    ],
+    "commandline_contains_any": [
+      "-sV",
+      "-sS",
+      "-sU",
+      "-sT",
+      "--open",
+      "-p 1-",
+      "--script",
+      "masscan",
+      "zmap"
+    ],
+    "tags": [
+      "discovery",
+      "network-scan",
+      "t1046"
+    ]
+  },
+  {
+    "id": "EXEC-SCHED-TASK-001",
+    "name": "Scheduled Task Created / Modified for Persistence",
+    "description": "Schtasks.exe invoked with create or modification parameters — persistence via Windows task scheduler.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "schtasks.exe",
+      "at.exe"
+    ],
+    "commandline_contains_any": [
+      "/create",
+      "/change",
+      "ONLOGON",
+      "ONSTART",
+      "ONIDLE",
+      "powershell",
+      "cmd.exe",
+      "wscript",
+      "mshta",
+      "regsvr32",
+      "rundll32"
+    ],
+    "tags": [
+      "persistence",
+      "scheduled-task",
+      "t1053",
+      "t1053.005"
+    ]
+  },
+  {
+    "id": "EXEC-SERVICE-001",
+    "name": "Malicious Windows Service Created",
+    "description": "SC.exe or PowerShell creating or modifying Windows services with suspicious binary paths.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "sc.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "sc create",
+      "sc config",
+      "New-Service",
+      "binpath=",
+      "binpath ",
+      "\\temp\\",
+      "\\appdata\\",
+      "\\programdata\\",
+      "cmd /c",
+      "powershell",
+      "mshta",
+      "regsvr32",
+      "rundll32"
+    ],
+    "tags": [
+      "persistence",
+      "new-service",
+      "t1543.003"
+    ]
+  },
+  {
+    "id": "DEFENSE-EVASION-TIMESTOMP-001",
+    "name": "Timestomping / File Metadata Manipulation",
+    "description": "Detects PowerShell or tools used to modify file creation, modification, or access timestamps.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe",
+      "timestomp.exe",
+      "fsutil.exe"
+    ],
+    "commandline_contains_any": [
+      "CreationTime",
+      "LastWriteTime",
+      "LastAccessTime",
+      "timestomp",
+      "SetCreationTime",
+      "SetLastWriteTime",
+      "SetLastAccessTime"
+    ],
+    "tags": [
+      "defense-evasion",
+      "timestomping",
+      "t1070.006"
+    ]
+  },
+  {
+    "id": "EVENT-LOG-CLEAR-001",
+    "name": "Windows Event Log Clearing",
+    "description": "Detects attempts to clear Windows event logs, a common defense evasion technique.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "wevtutil.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "clear-log",
+      "wevtutil cl",
+      "wevtutil clear-log",
+      "Remove-EventLog",
+      "Clear-EventLog"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1070.001"
+    ]
+  },
+  {
+    "id": "CRED-COMSVCS-001",
+    "name": "LSASS Minidump via comsvcs.dll",
+    "description": "Detects usage of comsvcs.dll MiniDump to dump LSASS memory.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "rundll32.exe"
+    ],
+    "commandline_contains_any": [
+      "comsvcs.dll",
+      "MiniDump"
+    ],
+    "tags": [
+      "credential-access",
+      "lsass",
+      "t1003.001"
+    ]
+  },
+  {
+    "id": "ACCOUNT-CREATION-001",
+    "name": "Local Account Creation and Admin Group Modification",
+    "description": "Detects the creation of local accounts or adding users to the Administrators group.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "net.exe",
+      "net1.exe"
+    ],
+    "commandline_contains_any": [
+      "user /add",
+      "localgroup administrators",
+      "/add"
+    ],
+    "tags": [
+      "persistence",
+      "t1136.001",
+      "t1078.003"
+    ]
+  },
+  {
+    "id": "PERSIST-APPINIT-001",
+    "name": "AppInit_DLLs Registry Persistence",
+    "description": "Detects modifications to the AppInit_DLLs registry key for persistence and injection.",
+    "severity": "high",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\Microsoft\\Windows NT\\CurrentVersion\\Windows\\AppInit_DLLs"
+    ],
+    "tags": [
+      "persistence",
+      "privilege-escalation",
+      "t1546.010"
+    ]
+  },
+  {
+    "id": "DEFENSE-EVASION-AMSI-001",
+    "name": "AMSI Bypass / Tampering",
+    "description": "Detects known AMSI bypass patterns in command lines.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "AmsiUtils",
+      "amsiInitFailed",
+      "System.Management.Automation.AmsiUtils",
+      "amsi.dll"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1562.001"
+    ]
+  },
+  {
+    "id": "LATERAL-WINRM-001",
+    "name": "WinRM / PowerShell Remoting Lateral Movement",
+    "description": "Detects execution of PowerShell commands indicative of remote execution via WinRM.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "Invoke-Command",
+      "Enter-PSSession",
+      "-ComputerName"
+    ],
+    "tags": [
+      "lateral-movement",
+      "t1021.006"
+    ]
+  },
+  {
+    "id": "C2-TUNNEL-001",
+    "name": "Ngrok / Tunneling Tool Execution",
+    "description": "Detects execution of ngrok or cloudflared which are frequently used to tunnel C2 traffic or bypass firewalls.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "ngrok.exe",
+      "cloudflared.exe"
+    ],
+    "tags": [
+      "command-and-control",
+      "t1572"
+    ]
+  },
+  {
+    "id": "PERSIST-WMI-001",
+    "name": "WMI Event Subscription Persistence",
+    "description": "Detects WMI command line tools creating event filters or consumers for persistence.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "wmic.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "__EventFilter",
+      "CommandLineEventConsumer",
+      "ActiveScriptEventConsumer",
+      "Register-WmiEvent",
+      "Set-WmiInstance"
+    ],
+    "tags": [
+      "persistence",
+      "privilege-escalation",
+      "t1546.003"
+    ]
+  },
+  {
+    "id": "CRED-BROWSER-001",
+    "name": "Browser Credential Theft (Cookie/Login Data)",
+    "description": "Detects suspicious access or copying of browser credential databases.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "xcopy.exe",
+      "robocopy.exe",
+      "copy.exe"
+    ],
+    "commandline_contains_any": [
+      "Login Data",
+      "Cookies",
+      "Web Data",
+      "AppData\\Local\\Google\\Chrome\\User Data",
+      "AppData\\Roaming\\Mozilla\\Firefox\\Profiles"
+    ],
+    "tags": [
+      "credential-access",
+      "t1539",
+      "t1555.003"
+    ]
+  },
+  {
+    "id": "EXFIL-RCLONE-001",
+    "name": "Exfiltration via Rclone / Cloud Sync Tools",
+    "description": "Detects the use of rclone or similar utilities often used to exfiltrate data to cloud storage providers.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "rclone.exe",
+      "megasync.exe"
+    ],
+    "commandline_contains_any": [
+      "copy",
+      "sync",
+      "--config",
+      "mega:",
+      "gdrive:",
+      "onedrive:"
+    ],
+    "tags": [
+      "exfiltration",
+      "t1567.002"
+    ]
+  },
+  {
+    "id": "CRED-DCSYNC-001",
+    "name": "DCSync / Active Directory Replication",
+    "description": "Detects command lines associated with DCSync attacks (mimikatz, secretsdump) to extract AD hashes.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "mimikatz.exe",
+      "secretsdump.exe",
+      "secretsdump.py",
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "lsadump::dcsync",
+      "drsuapi",
+      "secretsdump"
+    ],
+    "tags": [
+      "credential-access",
+      "t1003.006"
+    ]
+  },
+  {
+    "id": "DEFENSE-EVASION-BYOVD-001",
+    "name": "Bring Your Own Vulnerable Driver (BYOVD)",
+    "description": "Detects attempts to load known vulnerable drivers often used to terminate EDR agents.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "sc.exe",
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "RTCore64.sys",
+      "gdrv.sys",
+      "Capcom.sys",
+      "iqvw64e.sys",
+      "ATSZHW32.sys",
+      "procexp.sys"
+    ],
+    "tags": [
+      "defense-evasion",
+      "privilege-escalation",
+      "t1068"
+    ]
+  },
+  {
+    "id": "LOLBIN-MSBUILD-001",
+    "name": "MSBuild Inline Task Execution",
+    "description": "Detects MSBuild executing project files (.csproj, .xml) which can be used to bypass AppLocker and execute arbitrary C# code.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "msbuild.exe"
+    ],
+    "commandline_contains_any": [
+      ".xml",
+      ".csproj",
+      "\\temp\\",
+      "\\appdata\\"
+    ],
+    "tags": [
+      "defense-evasion",
+      "execution",
+      "t1127.001"
+    ]
+  },
+  {
+    "id": "CRED-KERBEROAST-001",
+    "name": "Kerberoasting / AS-REP Roasting",
+    "description": "Detects tools used for extracting Kerberos tickets for offline cracking.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "rubeus.exe",
+      "kekeo.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "kerberoast",
+      "asreproast",
+      "tgssub",
+      "ptt",
+      "monitor",
+      "Invoke-Kerberoast"
+    ],
+    "tags": [
+      "credential-access",
+      "t1558.003",
+      "t1558.004"
+    ]
+  },
+  {
+    "id": "PERSIST-SILENTPROCESSEXIT-001",
+    "name": "SilentProcessExit / IFEO LSASS Dump",
+    "description": "Detects registry modifications configuring SilentProcessExit, a technique used for stealthy persistence or dumping LSASS.",
+    "severity": "critical",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\SilentProcessExit\\lsass.exe",
+      "\\SilentProcessExit",
+      "GlobalFlag"
+    ],
+    "tags": [
+      "persistence",
+      "credential-access",
+      "t1546.012"
+    ]
+  },
+  {
+    "id": "LOLBIN-FORFILES-001",
+    "name": "Forfiles Execution Evasion",
+    "description": "Detects the use of forfiles.exe to execute arbitrary commands, often bypassing process parent-child analysis.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "forfiles.exe"
+    ],
+    "commandline_contains_any": [
+      "/c",
+      "/p",
+      "powershell",
+      "cmd.exe",
+      "rundll32",
+      "regsvr32"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1202"
+    ]
+  },
+  {
+    "id": "CRED-SHADOWCREDS-001",
+    "name": "Active Directory Shadow Credentials Modification",
+    "description": "Detects modification of msds-KeyCredentialLink for AD persistence and shadow credentials attacks.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe",
+      "whisker.exe"
+    ],
+    "commandline_contains_any": [
+      "msds-KeyCredentialLink",
+      "Whisker",
+      "Set-ADUser",
+      "Set-ADComputer"
+    ],
+    "tags": [
+      "credential-access",
+      "persistence",
+      "t1098"
+    ]
+  },
+  {
+    "id": "LATERAL-DCOM-001",
+    "name": "Lateral Movement via DCOM",
+    "description": "Detects PowerShell instantiating remote DCOM objects like MMC20.Application or ShellWindows for lateral movement.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "[activator]::CreateInstance",
+      "Type::GetTypeFromProgID",
+      "MMC20.Application",
+      "ShellWindows",
+      "Excel.Application"
+    ],
+    "tags": [
+      "lateral-movement",
+      "t1021.003"
+    ]
+  },
+  {
+    "id": "DEFENSE-EVASION-UNHOOK-001",
+    "name": "API Unhooking / Direct Syscalls",
+    "description": "Detects command lines referencing API unhooking or direct syscall techniques (e.g., Hell's Gate, Halo's Gate, Perun's Fart).",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "Hell's Gate",
+      "Halo's Gate",
+      "Tartarus' Gate",
+      "Perun's Fart",
+      "NtAllocateVirtualMemory",
+      "NtWriteVirtualMemory",
+      "NtProtectVirtualMemory"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1055"
+    ]
+  },
+  {
+    "id": "ETW-TAMPER-001",
+    "name": "ETW Blinding / Provider Tampering",
+    "description": "Detects attempts to disable or modify Event Tracing for Windows (ETW), particularly the Threat-Intelligence provider used by EDRs.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "logman.exe",
+      "wevtutil.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "cmd.exe",
+      "auditpol.exe"
+    ],
+    "commandline_contains_any": [
+      "stop EventLog-",
+      "Microsoft-Windows-Threat-Intelligence",
+      "Microsoft-Windows-Kernel-Process",
+      "Remove-EtwTraceProvider",
+      "Disable-EtwTraceSession"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1562.006"
+    ]
+  },
+  {
+    "id": "PERSIST-LSA-001",
+    "name": "LSA Authentication Package Injection",
+    "description": "Detects modifications to LSA Security Packages or Authentication Packages in the registry, which allows a malicious DLL to be loaded into LSASS and capture cleartext credentials.",
+    "severity": "critical",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\Control\\Lsa\\Security Packages",
+      "\\Control\\Lsa\\Authentication Packages",
+      "\\Control\\Lsa\\Notification Packages"
+    ],
+    "tags": [
+      "persistence",
+      "credential-access",
+      "t1547.005",
+      "t1003.001"
+    ]
+  },
+  {
+    "id": "PERSIST-TIMEPROV-001",
+    "name": "W32Time Time Provider Persistence",
+    "description": "Detects modification of the Windows Time service (W32Time) TimeProviders registry key to load a malicious DLL upon service startup.",
+    "severity": "high",
+    "type": "registry_change",
+    "registry_path_contains_any": [
+      "\\Services\\W32Time\\TimeProviders"
+    ],
+    "tags": [
+      "persistence",
+      "t1547.003"
+    ]
+  },
+  {
+    "id": "EVASION-MOTW-001",
+    "name": "Mark of the Web (MOTW) Bypass via Disk Mount",
+    "description": "Detects mounting of ISO, IMG, or VHD files via command line, a common technique to bypass MOTW and SmartScreen defenses.",
+    "severity": "medium",
+    "type": "process_creation",
+    "process_any": [
+      "powershell.exe",
+      "pwsh.exe"
+    ],
+    "commandline_contains_any": [
+      "Mount-DiskImage",
+      ".iso",
+      ".img",
+      ".vhd",
+      ".vhdx"
+    ],
+    "tags": [
+      "defense-evasion",
+      "t1553.005"
+    ]
+  },
+  {
+    "id": "EVASION-ADS-001",
+    "name": "Execution from NTFS Alternate Data Stream (ADS)",
+    "description": "Detects execution of hidden payloads stored inside NTFS Alternate Data Streams, avoiding standard file scanners.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "wmic.exe",
+      "rundll32.exe",
+      "regsvr32.exe"
+    ],
+    "commandline_regex": ":[a-zA-Z0-9_\\\\-]+\\\\.(exe|dll|vbs|js|ps1|bat|cmd)",
+    "tags": [
+      "defense-evasion",
+      "t1564.004"
+    ]
+  },
+  {
+    "id": "EXPLOIT-SPOOLER-001",
+    "name": "Suspicious Spoolsv Child Process (PrintNightmare)",
+    "description": "Detects the Windows Print Spooler service spawning an interactive shell or suspicious process, highly indicative of PrintNightmare or similar RPC exploitation.",
+    "severity": "critical",
+    "type": "process_creation",
+    "parent_process_any": [
+      "spoolsv.exe"
+    ],
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "rundll32.exe",
+      "regsvr32.exe",
+      "certutil.exe",
+      "curl.exe"
+    ],
+    "tags": [
+      "privilege-escalation",
+      "execution",
+      "t1068",
+      "printnightmare"
+    ]
+  },
+  {
+    "id": "CRED-WER-001",
+    "name": "LSASS Dump via Windows Error Reporting (WER)",
+    "description": "Detects attempts to crash LSASS or force Windows Error Reporting (WerFault.exe) to generate a full memory dump of the LSASS process.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "werfault.exe"
+    ],
+    "commandline_contains_any": [
+      "-u -p",
+      "lsass.exe"
+    ],
+    "tags": [
+      "credential-access",
+      "t1003.001"
+    ]
+  },
+  {
+    "id": "PERSIST-MOFCOMP-001",
+    "name": "WMI Persistence via MOFComp",
+    "description": "Detects the compilation of MOF files, a stealthy method to establish WMI event subscriptions for persistence or lateral movement.",
+    "severity": "high",
+    "type": "process_creation",
+    "process_any": [
+      "mofcomp.exe"
+    ],
+    "tags": [
+      "persistence",
+      "privilege-escalation",
+      "t1546.003"
+    ]
+  },
+  {
+    "id": "LATERAL-SYSVOL-001",
+    "name": "Malicious GPO Modification in SYSVOL",
+    "description": "Detects manual editing of Group Policy objects (groups.xml, gpt.ini) in the SYSVOL share, often used for domain-wide lateral movement or ransomware deployment.",
+    "severity": "critical",
+    "type": "process_creation",
+    "process_any": [
+      "cmd.exe",
+      "powershell.exe",
+      "pwsh.exe",
+      "xcopy.exe",
+      "robocopy.exe"
+    ],
+    "commandline_contains_any": [
+      "\\SYSVOL\\",
+      "groups.xml",
+      "gpt.ini",
+      "ScheduledTasks.xml"
+    ],
+    "tags": [
+      "lateral-movement",
+      "t1484.001"
+    ]
+  }
+]

@@ -1,0 +1,61 @@
+{
+  "poll_interval_seconds": 2,
+  "min_poll_interval_seconds": 2,
+  "max_poll_interval_seconds": 15,
+  "max_agent_cpu_percent": 5,
+  "telemetry_path": "edr_telemetry.json",
+  "rules_path": "rules/detection_rules.json",
+  "process_tree_max_depth": 12,
+  "response_actions": {
+    "terminate_critical_processes": true,
+    "terminate_timeout_seconds": 3,
+    "kill_after_timeout": false,
+    "protected_processes": [
+      "system",
+      "smss.exe",
+      "csrss.exe",
+      "wininit.exe",
+      "winlogon.exe",
+      "services.exe",
+      "lsass.exe",
+      "svchost.exe"
+    ]
+  },
+  "registry_startup_keys": [
+    {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    },
+    {
+      "hive": "HKCU",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+    },
+    {
+      "hive": "HKLM",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\Run"
+    },
+    {
+      "hive": "HKLM",
+      "path": "Software\\Microsoft\\Windows\\CurrentVersion\\RunOnce"
+    }
+  ],
+  "sensitive_paths": [
+    "C:/inetpub/wwwroot/.env",
+    "C:/inetpub/wwwroot/web.config",
+    "C:/Oracle/Middleware/user_projects/domains/base_domain/config/config.xml"
+  ],
+  "sensitive_globs": [
+    "**/.env",
+    "**/web.config",
+    "**/application.properties",
+    "**/config.php"
+  ],
+  "fim_roots": [
+    "C:/inetpub/wwwroot"
+  ],
+  "ignore_remote_ips": [
+    "127.0.0.1",
+    "::1",
+    "0.0.0.0"
+  ]
+}
